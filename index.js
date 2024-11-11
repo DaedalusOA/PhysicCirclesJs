@@ -27,7 +27,7 @@ function handleTouchStart(event) {
     touchY = event.touches[0].clientY;
     touch = true;
 
-   
+    console.log(`Touch started at: (${touchX}, ${touchY})`);
 }
 
 // Function to handle touchmove event
@@ -39,7 +39,7 @@ function handleTouchMove(event) {
     if (event.touches.length > 0) {
         touchX = event.touches[0].clientX;
         touchY = event.touches[0].clientY;
-
+        console.log(`Touch moved to: (${touchX}, ${touchY})`);
     }
 }
 
@@ -182,7 +182,6 @@ class Particle {
         this.vx = vx
         this.vy = vy
         this.size = size
-          this.last_pos = new Vector2(x,y);
     }
 
     draw(index){
@@ -193,7 +192,6 @@ class Particle {
           let green = 100-this.vy*20;
           let blue = 255;
           let alpha = 1;
-          
 
           // Create the new rgba string
           let rgbaColor = `rgba(${red}, ${green}, ${blue}, ${alpha})`;
@@ -206,18 +204,6 @@ class Particle {
     avoidWalls(windowWidth,windowHeight, wallDamping){
         {
             // collisions
-            if (isNaN(this.x))
-            { 
-                    this.x = this.last_pos.x + 3-randomF(6)
-            }
-            if (isNaN(this.y)){
-                 this.y = this.last_pos.y + 3-randomF(6)
-                 
-
-            }
-
-            if (!isNaN(this.x)) this.last_pos.x = this.x;
-            if (!isNaN(this.y)) this.last_pos.y = this.y;
             
             if (arows[1] == true){
                 wallDamping = 1;
@@ -244,8 +230,6 @@ class Particle {
                 this.x = 0 + this.size;       // Prevent sinking below the boundary
             }
         }
-        
-        
     }
     applyGravity(gravity, width, height){
         let factor = 2;
@@ -414,7 +398,7 @@ function isMobileDevice() {
 
 
 let Particles = [];
-let particleSize = 15;
+let particleSize = 15 ;
 let count = 0;
 let total_particles = 1000;
 let tree = new Grid(particleSize);  // Create a new Grid instance using particleSize
@@ -424,7 +408,7 @@ let ismob = isMobileDevice()
 
 
 function makeParticles(){
-    total_particles = ((canvas.width/particleSize*2) * (canvas.height/particleSize*2))*0.025
+    total_particles = ((canvas.width/particleSize*2) * (canvas.height/particleSize*2))*0.016
     
 
 for (let i = 0; i <= total_particles; ++i) {
@@ -485,12 +469,10 @@ function update(){
         }
     }
     if (less){
+        for (let i = 0; i <= 10; ++i) {
+        Particles.pop();
         
-        for (let i = 0; i <= 3; ++i) {
-            Particles.pop()
-            }
-        
-        
+        }
     }
         
     // In the logic where you want to reset particles
@@ -503,7 +485,6 @@ function update(){
     }
 
     for (let i of Particles) {
-        //console.log(Math.floor(i.x), Math.floor(i.y), Math.floor(i.vy),  Math.floor(i.vx), Math.floor(i.size),)
         i.applyGravity(1.5, canvas.width, canvas.height);
     }
     
@@ -516,7 +497,7 @@ function update(){
            
         }
     }else{
-        for (let i = 0; i <20; i++) {
+        for (let i = 0; i <25; i++) {
             solveCollisions(Particles);
             for (let i of Particles) {
                 i.avoidWalls(canvas.width, canvas.height, 0.2);
@@ -544,10 +525,8 @@ function draw() {
         c++;
     }
 
-     if (ismob || canvas.width < 512){
+     if (ismob){
          instructions.textContent = 'touch to interact, more on computer' ;
-     } else{
-        instructions.textContent = 'right-click pull, space repel, r restart, m more, l less' ;
      }
 
      fpstag.textContent = 'frames per second: ' + String(Math.floor(fps));
