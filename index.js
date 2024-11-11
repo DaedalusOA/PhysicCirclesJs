@@ -10,8 +10,8 @@ function resizeCanvas(particles) {
    
 }
 // Function to handle touch events
-let touchX = 0;
-let touchY = 0;
+let touchX;
+let touchY;
 let touch = false;
 
 ///////touch
@@ -24,8 +24,8 @@ function handleTouchStart(event) {
     event.preventDefault();
 
     // Get the first touch point's coordinates
-    touchX = event.touches[0].clientX;
-    touchY = event.touches[0].clientY;
+    touchX = event.touches.clientX;
+    touchY = event.touches.clientY;
     touch = true;
 
     console.log(`Touch started at: (${touchX}, ${touchY})`);
@@ -466,21 +466,24 @@ function update(){
     }
     if (touch){
         for (let particle of Particles) {
-            
-            let dist = distance(touchX, touchY, particle.x, particle.y);
-            if (dist < 300){
-                let dir = new Vector2(touchX-particle.x, touchY-particle.y)
-                let force = 5000. / (dist * dist + 1.); // Limit force magnitude using distance
-                let maxForce = 1.;                       // Limit max force to avoid over-pulling
-                force = Math.min(force, maxForce);
-                let forcee = (Math.sqrt(dist)) / 20;
-                
-                
-                particle.vx -= dir.x * force * 0.09; // Reduced multiplier for smoother motion
-                particle.vy -= dir.y * force * 0.09; // Reduced multiplier for smoother motion
-               
-               
+            for (let t = 0; t < touchX.lenght; ++t) {
+                let dist = distance(touchX[t], touchY[t], particle.x, particle.y);
+                if (dist < 300){
+                    let dir = new Vector2(touchX[t]-particle.x, touchY[t]-particle.y)
+                    let force = 5000. / (dist * dist + 1.); // Limit force magnitude using distance
+                    let maxForce = 1.;                       // Limit max force to avoid over-pulling
+                    force = Math.min(force, maxForce);
+                    let forcee = (Math.sqrt(dist)) / 20;
+                    
+                    
+                    particle.vx -= dir.x * force * 0.06; // Reduced multiplier for smoother motion
+                    particle.vy -= dir.y * force * 0.06; // Reduced multiplier for smoother motion
+                   
+                   
+                }
             }
+            
+           
         }
 
     }
