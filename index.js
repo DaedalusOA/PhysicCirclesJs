@@ -409,10 +409,7 @@ let ismob = isMobileDevice()
 
 function makeParticles(){
     total_particles = ((canvas.width/particleSize*2) * (canvas.height/particleSize*2))*0.016
-    if (ismob){
-     particleSize = particleSize/2;
-     total_particles *=2;
-    }
+    
 
 for (let i = 0; i <= total_particles; ++i) {
     count +=1;
