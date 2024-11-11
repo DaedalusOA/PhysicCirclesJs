@@ -422,6 +422,13 @@ let ismob = isMobileDevice()
 
 function makeParticles(){
     total_particles = ((canvas.width/particleSize*2) * (canvas.height/particleSize*2))*0.022
+    /// make phone sim more defined
+    if (ismob){
+        total_particles = total_particles*2;
+        particleSize = particleSize/2;
+    
+    }
+    /// make phone sim more defined
     
 
 for (let i = 0; i <= total_particles; ++i) {
