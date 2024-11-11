@@ -417,7 +417,7 @@ function update(){
         }
         
     }
-    if (ismob){
+    if (ismob & touch){
         for (let particle of Particles) {
             
             let dist = distance(touchX, touchY, particle.x, particle.y);
