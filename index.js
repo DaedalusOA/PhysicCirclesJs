@@ -468,8 +468,8 @@ function update(){
                 let forcee = (Math.sqrt(dist)) / 20;
                 
                 
-                particle.vx -= dir.x * force * 0.5; // Reduced multiplier for smoother motion
-                particle.vy -= dir.y * force * 0.5; // Reduced multiplier for smoother motion
+                particle.vx -= dir.x * force * 0.2; // Reduced multiplier for smoother motion
+                particle.vy -= dir.y * force * 0.2; // Reduced multiplier for smoother motion
                
                
             }
