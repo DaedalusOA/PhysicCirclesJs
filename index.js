@@ -539,7 +539,7 @@ function draw() {
     }
 
     if (ismob || canvas.width < 512){
-        instructions.textContent = 'sim is ptimized for larger devices' ;
+        instructions.textContent = 'website is optimized for larger devices' ;
     } else{
        instructions.textContent = 'right-click pull, space repel, r restart, m more, l less' ;
     }
