@@ -12,24 +12,53 @@ function resizeCanvas(particles) {
 let touchX = 0;
 let touchY = 0;
 let touch = false;
-function handleTouch(event) {
-    event.preventDefault(); // Prevent the default touch action (e.g., zooming)
-    touch = event.touches[0]; // Get the first touch point
-    touchX = touch.clientX - canvas.offsetLeft; // Get the x position relative to the canvas
-    touchY = touch.clientY - canvas.offsetTop;  // Get the y position relative to the canvas
 
-    
+///////touch
+
+
+
+// Function to handle touchstart event
+function handleTouchStart(event) {
+    // Prevent default behavior (optional)
+    event.preventDefault();
+
+    // Get the first touch point's coordinates
+    touchX = event.touches[0].clientX;
+    touchY = event.touches[0].clientY;
+    touch = true;
+
+    console.log(`Touch started at: (${touchX}, ${touchY})`);
 }
 
-canvas.addEventListener('touchstart', handleTouch);
+// Function to handle touchmove event
+function handleTouchMove(event) {
+    // Prevent default behavior (optional)
+    event.preventDefault();
 
-document.addEventListener('touchstart', function(event) {
-    const touch = event.touches[0]; // Get the first touch point
-    touchX = touch.clientX;
-    touchY = touch.clientY;
-    
-    console.log(`Touch X: ${x}, Y: ${y}`);
-});
+    // Get the updated touch coordinates
+    if (event.touches.length > 0) {
+        touchX = event.touches[0].clientX;
+        touchY = event.touches[0].clientY;
+        console.log(`Touch moved to: (${touchX}, ${touchY})`);
+    }
+}
+
+// Function to handle touchend event
+function handleTouchEnd(event) {
+    // Prevent default behavior (optional)
+    event.preventDefault();
+
+    touch = false;
+    console.log("Touch ended");
+}
+
+// Attach the touch event listeners
+document.addEventListener("touchstart", handleTouchStart, false);
+document.addEventListener("touchmove", handleTouchMove, false);
+document.addEventListener("touchend", handleTouchEnd, false);
+
+
+///////touch
 // Detect if the device is mobile
 function isMobile() {
     return /Mobi|Android/i.test(navigator.userAgent);
@@ -417,7 +446,7 @@ function update(){
         }
         
     }
-    if (ismob & touch){
+    if (touch){
         for (let particle of Particles) {
             
             let dist = distance(touchX, touchY, particle.x, particle.y);
@@ -520,4 +549,3 @@ function animate() {
 }
 
 animate(); // Start the animation loop
-
