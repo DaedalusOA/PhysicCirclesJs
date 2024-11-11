@@ -8,8 +8,18 @@ function resizeCanvas(particles) {
    
    
 }
-
-
+var touchX = 0, touchY = 0;
+document.addEventListener('touchstart', function(event) {
+    const touch = event.touches[0]; // Get the first touch point
+    touchX = touch.clientX;
+    touchY = touch.clientY;
+    
+    console.log(`Touch X: ${x}, Y: ${y}`);
+});
+// Detect if the device is mobile
+function isMobile() {
+    return /Mobi|Android/i.test(navigator.userAgent);
+}
 
 resizeCanvas()
 var c = canvas.getContext('2d');
@@ -151,7 +161,9 @@ class Particle {
         {
             // collisions
             
-            
+            if (arows[1] == true){
+                wallDamping = 1;
+            }
             if (this.y + this.size > windowHeight)
             {
                 this.vy *= -wallDamping;      // Reverse and dampen the vertical velocity
@@ -190,12 +202,6 @@ class Particle {
         }
         if (arows[1] == true){
             this.vy -= gravity;
-            let dist = distance(width / 2, height / 2, this.x, this.y);
-            let dir = new Vector2(width / 2-this.x, height / 2-this.y)
-            this.vx += dir.x * 0.005; // Reduced multiplier for smoother motion
-            this.vy += dir.y * 0.005; // 
-            this.x += this.vx;
-            this.y += this.vy;
             
         }
         this.vy += gravity;
@@ -465,3 +471,4 @@ function animate() {
 }
 
 animate(); // Start the animation loop
+
