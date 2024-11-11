@@ -27,7 +27,7 @@ function handleTouchStart(event) {
     touchY = event.touches[0].clientY;
     touch = true;
 
-    console.log(`Touch started at: (${touchX}, ${touchY})`);
+   
 }
 
 // Function to handle touchmove event
@@ -39,7 +39,7 @@ function handleTouchMove(event) {
     if (event.touches.length > 0) {
         touchX = event.touches[0].clientX;
         touchY = event.touches[0].clientY;
-        console.log(`Touch moved to: (${touchX}, ${touchY})`);
+
     }
 }
 
@@ -414,7 +414,7 @@ function isMobileDevice() {
 
 
 let Particles = [];
-let particleSize = 15 ;
+let particleSize = 15;
 let count = 0;
 let total_particles = 1000;
 let tree = new Grid(particleSize);  // Create a new Grid instance using particleSize
@@ -503,7 +503,7 @@ function update(){
     }
 
     for (let i of Particles) {
-        console.log(Math.floor(i.x), Math.floor(i.y), Math.floor(i.vy),  Math.floor(i.vx), Math.floor(i.size),)
+        //console.log(Math.floor(i.x), Math.floor(i.y), Math.floor(i.vy),  Math.floor(i.vx), Math.floor(i.size),)
         i.applyGravity(1.5, canvas.width, canvas.height);
     }
     
