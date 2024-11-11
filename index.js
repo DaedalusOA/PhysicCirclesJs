@@ -1,6 +1,7 @@
 var canvas = document.querySelector('canvas');
 const fpstag = document.getElementById("fps");
 const particleCount = document.getElementById("count");
+document.body.style.userSelect = 'none';  // Makes entire page unselectable
 // Function to resize the canvas to the window's inner width and height
 function resizeCanvas(particles) {
     canvas.width = window.innerWidth ;
