@@ -70,8 +70,7 @@ document.addEventListener('contextmenu', function(e) {
     //e.preventDefault(); // prevents inspect form showing up
 });
 
-window.devicePixelRatio=0;
-var scale = window.devicePixelRatio;
+
 
 var mouseX = 0, mouseY = 0;
 var RightClick = false;
@@ -182,6 +181,7 @@ class Particle {
         this.vx = vx
         this.vy = vy
         this.size = size
+        this.last_pos = new Vector2(x,y)
     }
 
     draw(index){
@@ -204,6 +204,19 @@ class Particle {
     avoidWalls(windowWidth,windowHeight, wallDamping){
         {
             // collisions
+            if (isNaN(this.x))
+            { 
+                    this.x = this.last_pos.x + 3-randomF(6)
+            }
+            if (isNaN(this.y)){
+                    this.y = this.last_pos.y + 3-randomF(6)
+                     
+    
+            }
+    
+            if (!isNaN(this.x)) this.last_pos.x = this.x;
+            if (!isNaN(this.y)) this.last_pos.y = this.y;
+                
             
             if (arows[1] == true){
                 wallDamping = 1;
@@ -408,7 +421,7 @@ let ismob = isMobileDevice()
 
 
 function makeParticles(){
-    total_particles = ((canvas.width/particleSize*2) * (canvas.height/particleSize*2))*0.016
+    total_particles = ((canvas.width/particleSize*2) * (canvas.height/particleSize*2))*0.022
     
 
 for (let i = 0; i <= total_particles; ++i) {
@@ -525,9 +538,11 @@ function draw() {
         c++;
     }
 
-     if (ismob){
-         instructions.textContent = 'touch to interact, more on computer' ;
-     }
+    if (ismob || canvas.width < 512){
+        instructions.textContent = 'sim is ptimized for larger devices' ;
+    } else{
+       instructions.textContent = 'right-click pull, space repel, r restart, m more, l less' ;
+    }
 
      fpstag.textContent = 'frames per second: ' + String(Math.floor(fps));
      particleCount.textContent = 'particles: ' + String(c);
