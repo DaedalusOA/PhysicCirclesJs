@@ -8,14 +8,8 @@ function resizeCanvas(particles) {
    
    
 }
-var touchX = 0, touchY = 0;
-document.addEventListener('touchstart', function(event) {
-    const touch = event.touches[0]; // Get the first touch point
-    touchX = touch.clientX;
-    touchY = touch.clientY;
-    
-    console.log(`Touch X: ${x}, Y: ${y}`);
-});
+
+
 // Detect if the device is mobile
 function isMobile() {
     return /Mobi|Android/i.test(navigator.userAgent);
@@ -40,7 +34,6 @@ var more = false;
 var less = false;
 var resetpressed = false;
 var arows = [false, false, false, false];
-
 
 
 function randomInt(num){
@@ -72,10 +65,12 @@ document.addEventListener('keydown', function(event) {
     if (event.key === 'l') {
         less = true;
     }
-    if (event.key === "ArrowUp") arows[0] = true;
-    if (event.key === "ArrowDown") arows[1] = true;
-    if (event.key === "ArrowLeft") arows[2] = true;
-    if (event.key === "ArrowRight") arows[3] = true;
+    if (event.key === "ArrowUp" ) arows[0] = true; //true
+    if (event.key === "ArrowDown") arows[1] = true;//true
+    if (event.key === "ArrowLeft") arows[2] = true;//true
+    if (event.key === "ArrowRight") arows[3] = true;//true
+    
+    
     
 });
 document.addEventListener('keyup', function(event) {
@@ -99,16 +94,41 @@ document.addEventListener('keyup', function(event) {
     if (event.key === "ArrowLeft") arows[2] = false;
     if (event.key === "ArrowRight") arows[3] = false;
 });
-// Mouse down event listener to detect mouse press
-document.addEventListener('mousedown', function(event) {
-    if (event.button === 2) {
-        // Right-click detected
-        RightClick = true;
-    } else if (event.button === 0) {
-        // Left-click detected
-        LeftClick = true;
+// Variables to store touch state and position
+let isTouching = false;
+let touchX = 0;
+let touchY = 0;
+
+// Function to handle touchstart
+function handleTouchStart(event) {
+    // Prevent default scrolling behavior
+    event.preventDefault();
+    
+    // Check if there’s at least one touch point
+    if (event.touches.length > 0) {
+        isTouching = true;
+        touchX = event.touches[0].clientX;
+        touchY = event.touches[0].clientY;
     }
-});
+}
+
+// Function to handle touchend
+function handleTouchEnd(event) {
+    isTouching = false;
+}
+
+// Event listeners for touch events
+canvas.addEventListener("touchstart", handleTouchStart);
+canvas.addEventListener("touchend", handleTouchEnd);
+
+// Log the touch state and position
+function checkTouch() {
+    if (isTouching) {
+        console.log("Touching at:", touchX, touchY);
+    } else {
+        console.log("Not touching");
+    }
+}
 // Mouse down event listener to detect mouse press
 document.addEventListener('mouseup', function(event) {
     if (event.button === 2) {
@@ -355,7 +375,7 @@ let particleSize = 15 ;
 let count = 0;
 let total_particles = 1000;
 let tree = new Grid(particleSize);  // Create a new Grid instance using particleSize
-
+ismobile = isMobile();
 
 
 function makeParticles(){
@@ -404,12 +424,34 @@ function update(){
         
         }
     }
+
+    if (ismobile & isTouching){
+        for (let particle of Particles) {
+            
+            let dist = distance(touchX, touchY, particle.x, particle.y);
+            if (dist < 300){
+                let dir = new Vector2(touchX-particle.x, touchY-particle.y)
+                let force = 5000. / (dist * dist + 1.); // Limit force magnitude using distance
+                let maxForce = 1.;                       // Limit max force to avoid over-pulling
+                force = Math.min(force, maxForce);
+                                
+                particle.vx -= dir.x * force * 0.5; // Reduced multiplier for smoother motion
+                particle.vy -= dir.y * force * 0.5; // Reduced multiplier for smoother motion
+               
+               
+            }
+        }
+
+    }
+    
         
     // In the logic where you want to reset particles
     if (reset && !resetpressed) {
         Particles = [];  // Clear particles array
         makeParticles(); // Call function to create new particles
         resetpressed = true; // Set flag to prevent further resets while holding the key
+        arows = [false, false, false, false];
+
     } else {
         reset = false; // Reset so it only triggers once
     }
@@ -448,14 +490,19 @@ function draw() {
     const fps = 1000 / delta; // Convert milliseconds to seconds
     lastFrameTime = currentFrameTime;
 
-    //tree.drawGrid(canvas.width, canvas.height);
-    let c = 0
+    
+
+    c.strokeStyle = 'rgba(150,200, 255,0.6)';
+    c.lineWidth = 2;
+   
+    let cc = 0
     for (let i of Particles) {
-        i.draw(c);
-        c++;
+        i.draw(cc);
+        cc++;
     }
+    
      fpstag.textContent = 'frames per second: ' + String(Math.floor(fps));
-     particleCount.textContent = 'particles: ' + String(c);
+     particleCount.textContent = 'particles: ' + String(cc);
 }
 
 let lastFrameTime = performance.now();
