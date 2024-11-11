@@ -9,20 +9,20 @@ function resizeCanvas(particles) {
    
 }
 // Function to handle touch events
-let x = 0;
-let y = 0;
+let touchX = 0;
+let touchY = 0;
 let touch = false;
 function handleTouch(event) {
     event.preventDefault(); // Prevent the default touch action (e.g., zooming)
     touch = event.touches[0]; // Get the first touch point
-    x = touch.clientX - canvas.offsetLeft; // Get the x position relative to the canvas
-    y = touch.clientY - canvas.offsetTop;  // Get the y position relative to the canvas
+    touchX = touch.clientX - canvas.offsetLeft; // Get the x position relative to the canvas
+    touchY = touch.clientY - canvas.offsetTop;  // Get the y position relative to the canvas
 
     
 }
 
 canvas.addEventListener('touchstart', handleTouch);
-var touchX = 0, touchY = 0;
+
 document.addEventListener('touchstart', function(event) {
     const touch = event.touches[0]; // Get the first touch point
     touchX = touch.clientX;
@@ -377,8 +377,13 @@ let tree = new Grid(particleSize);  // Create a new Grid instance using particle
 let ismob = isMobileDevice()
 
 
+
 function makeParticles(){
     total_particles = ((canvas.width/particleSize*2) * (canvas.height/particleSize*2))*0.016
+    if (ismob){
+     particleSize = particleSize/2;
+     total_particles *=2;
+    }
 
 for (let i = 0; i <= total_particles; ++i) {
     count +=1;
@@ -411,6 +416,26 @@ function update(){
             }
         }
         
+    }
+    if (ismob){
+        for (let particle of Particles) {
+            
+            let dist = distance(touchX, touchY, particle.x, particle.y);
+            if (dist < 300){
+                let dir = new Vector2(touchX-particle.x, touchY-particle.y)
+                let force = 5000. / (dist * dist + 1.); // Limit force magnitude using distance
+                let maxForce = 1.;                       // Limit max force to avoid over-pulling
+                force = Math.min(force, maxForce);
+                let forcee = (Math.sqrt(dist)) / 20;
+                
+                
+                particle.vx -= dir.x * force * 0.5; // Reduced multiplier for smoother motion
+                particle.vy -= dir.y * force * 0.5; // Reduced multiplier for smoother motion
+               
+               
+            }
+        }
+
     }
     if (more){
         for (let i = 0; i <= 3; ++i) {
@@ -477,6 +502,7 @@ function draw() {
      if (ismob){
          instructions.textContent = 'touch to interact, more on computer' ;
      }
+
      fpstag.textContent = 'frames per second: ' + String(Math.floor(fps));
      particleCount.textContent = 'particles: ' + String(c);
 }
@@ -494,3 +520,4 @@ function animate() {
 }
 
 animate(); // Start the animation loop
+
