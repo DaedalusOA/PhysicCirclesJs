@@ -345,7 +345,7 @@ function solveCollisions(particles){
 
 
 let Particles = [];
-let particleSize = 10 ;
+let particleSize = 15 ;
 let count = 0;
 let total_particles = 1000;
 let tree = new Grid(particleSize);  // Create a new Grid instance using particleSize
